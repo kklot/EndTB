@@ -22,6 +22,12 @@ knitr::opts_chunk$set(
 The goal of EndTB is to provide a convinient set of established TB models for
 simulation, estimation, and projection of Tuberculosis Epidemic.
 
+Moreover
+
+- all the models are implemented in C++ which provides the fastest possible simulation.
+- the models are called within TMB framework, the Template Model Builder,
+allowing advanced and fast parameter estimation with emprical Bayes approach.
+
 ## Installation
 
 You can install the development version of EndTB like so:

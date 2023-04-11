@@ -6,10 +6,6 @@
 \description{
 TB model
 }
-\examples{
-TB <- TBM$new()
-TB$plot()
-}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
