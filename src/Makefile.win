@@ -1,0 +1,7 @@
+all: EndTB.dll
+
+EndTB.dll: EndTB.cpp
+	Rscript --vanilla -e "TMB::compile('EndTB.cpp', '-I../inst/include')"
+
+clean:
+	rm -rf *o

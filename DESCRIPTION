@@ -1,0 +1,24 @@
+Package: EndTB
+Title: Tuberculosis Estimate and Projection Package
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Kinh", "Nguyen", , "kinh.nguyen@uni-heidelberg.de", role = c("aut", "cre", "main"),
+           comment = c(ORCID = "0000-0001-8912-5288")),
+    person("Mirna", "Abd El Aziz", , "mirna.aziz90@gmail.com", role = c("aut")))
+Description: Simulate, Estimate, and Project TB Models. The model is written in
+    C++ for fast simulation, the estimation is done with emprical Bayes approach,
+    most methods are written in R6 class for easy access.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.2
+LinkingTo: 
+    BH,
+    TMB
+Imports: 
+    dplyr,
+    magrittr,
+    R6,
+    tidyr
+Suggests: 
+    ggplot2

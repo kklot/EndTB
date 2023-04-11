@@ -1,0 +1,62 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# EndTB <img src="man/figures/logo120.png" align="right" />
+
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+<!-- badges: end -->
+
+The goal of EndTB is to provide a convinient set of established TB models for
+simulation, estimation, and projection of Tuberculosis Epidemic.
+
+## Installation
+
+You can install the development version of EndTB like so:
+
+```{r eval=FALSE}
+remotes::install_github('kklot/EndTB')
+```
+
+Documents of the package and functions can be view as normal R's documentation
+or online at [EndTB.de.](https://endtb.kklot.github.io)
+
+## Example
+
+This is a basic example which shows you how to start a model:
+
+```{r}
+library(EndTB)
+TB <- TBM$new(c(sigma = 2))
+```
+
+Steady-state of the model without treatments and no population growth.
+
+```{r plot}
+TB$plot()
+```
+
+Check out model's parameters and states for Moldova model.
+
+```{r para}
+EndTB:::states_moldova
+EndTB:::pars_moldova
+```
+
+## TODO
+
+- [ ] Revise main (and currently the only) model
+- [ ] Add fitting example
+- [ ] Add model variations
