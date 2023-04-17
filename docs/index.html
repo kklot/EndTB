@@ -67,16 +67,18 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
+
+<p><img src="reference/figures/logo.png" align="right"></p>
 <div class="section level1">
-<div class="page-header"><h1 id="endtb-">EndTB <img src="reference/figures/logo.png" align="right"><a class="anchor" aria-label="anchor" href="#endtb-"></a>
+<div class="page-header"><h1 id="endtb">EndTB<a class="anchor" aria-label="anchor" href="#endtb"></a>
 </h1></div>
 <!-- badges: start -->
 
-<p>The goal of EndTB is to provide a convinient set of established TB models for simulation, estimation, and projection of Tuberculosis Epidemic.</p>
+<p>The goal of EndTB is to provide a convinient set of established TB models for the simulation, estimation, and projection of Tuberculosis Epidemic.</p>
 <p>Moreover</p>
 <ul>
-<li>all the models are implemented in C++ which provides the fastest possible simulation.</li>
-<li>the models are called within TMB framework, the Template Model Builder, allowing advanced and fast parameter estimation with emprical Bayes approach.</li>
+<li>the models are implemented in C++ which provides fast simulations.</li>
+<li>the models are called within the <a href="https://kaskr.github.io/adcomp/Introduction.html" class="external-link">TMB framework</a>, allowing advanced and fast parameter estimation with emprical Bayes approach.</li>
 </ul>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -84,7 +86,7 @@
 <p>You can install the development version of EndTB like so:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">'kklot/EndTB'</span><span class="op">)</span></span></code></pre></div>
-<p>Documents of the package and functions can be view as normal R’s documentation or online at <a href="https://endtb.kklot.github.io" class="external-link">EndTB.de.</a></p>
+<p>Documents of the package and functions can be view as normal R’s documentation or online at <a href="https://kklot.github.io/EndTB" class="external-link">EndTB.</a></p>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
@@ -94,10 +96,13 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">EndTB</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Welcome to EndTB</span></span>
 <span><span class="va">TB</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/TBM.html">TBM</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>sigma <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Steady-state of the model without treatments and no population growth.</p>
+<p>where the default parameters <span class="math inline"><em>σ</em></span> was replaced with 2.</p>
+<p>Steady-state of the model without treatments and no population growth for that set of parameters can be ploted with.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">TB</span><span class="op">$</span><span class="fu">plot</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-plot-1.png" width="100%"></p>
+<p>List of states to be plotted can be supplied into the arguments of the <code>plot</code> function above.</p>
+<p>Further details can be read in <strong>References</strong> in the top navigation. For example, <a href="https://kklot.github.io/EndTB/reference/TBM.html#method-plot-" class="external-link">the documentation of <code>plot</code></a>.</p>
 <p>Check out model’s parameters and states for Moldova model.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">EndTB</span><span class="fu">:::</span><span class="va">states_moldova</span></span>
@@ -142,14 +147,17 @@
 </h2>
 <ul class="task-list">
 <li>
-<input type="checkbox" disabled>Revise main (and currently the only) model</li>
+<input type="checkbox" disabled checked>1st revision of the WHO’s model (and currently the only)</li>
+<li>
+<input type="checkbox" disabled>Revise model to Argentina data</li>
 <li>
 <input type="checkbox" disabled>Add fitting example</li>
 <li>
-<input type="checkbox" disabled>Add model variations</li>
+<input type="checkbox" disabled>Add other model variations</li>
 </ul>
 </div>
 </div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
