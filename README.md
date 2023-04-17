@@ -1,7 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# EndTB <img src="man/figures/logo120.png" align="right" />
+<img src="man/figures/logo.png" align="right" />
+
+# EndTB
 
 <!-- badges: start -->
 
@@ -10,16 +12,15 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 <!-- badges: end -->
 
 The goal of EndTB is to provide a convinient set of established TB
-models for simulation, estimation, and projection of Tuberculosis
+models for the simulation, estimation, and projection of Tuberculosis
 Epidemic.
 
 Moreover
 
-- all the models are implemented in C++ which provides the fastest
-  possible simulation.
-- the models are called within TMB framework, the Template Model
-  Builder, allowing advanced and fast parameter estimation with emprical
-  Bayes approach.
+- the models are implemented in C++ which provides fast simulations.
+- the models are called within the [TMB
+  framework](https://kaskr.github.io/adcomp/Introduction.html), allowing
+  advanced and fast parameter estimation with emprical Bayes approach.
 
 ## Installation
 
@@ -30,7 +31,7 @@ remotes::install_github('kklot/EndTB')
 ```
 
 Documents of the package and functions can be view as normal R’s
-documentation or online at [EndTB.de.](https://endtb.kklot.github.io)
+documentation or online at [EndTB.](https://kklot.github.io/EndTB)
 
 ## Example
 
@@ -42,13 +43,23 @@ library(EndTB)
 TB <- TBM$new(c(sigma = 2))
 ```
 
-Steady-state of the model without treatments and no population growth.
+where the default parameters $\sigma$ was replaced with 2.
+
+Steady-state of the model without treatments and no population growth
+for that set of parameters can be ploted with.
 
 ``` r
 TB$plot()
 ```
 
 <img src="man/figures/README-plot-1.png" width="100%" />
+
+List of states to be plotted can be supplied into the arguments of the
+`plot` function above.
+
+Further details can be read in **References** in the top navigation. For
+example, [the documentation of
+`plot`](https://kklot.github.io/EndTB/reference/TBM.html#method-plot-).
 
 Check out model’s parameters and states for Moldova model.
 
@@ -93,6 +104,7 @@ EndTB:::pars_moldova
 
 ## TODO
 
-- [ ] Revise main (and currently the only) model
+- [x] 1st revision of the WHO’s model (and currently the only)
+- [ ] Revise model to Argentina data
 - [ ] Add fitting example
-- [ ] Add model variations
+- [ ] Add other model variations
