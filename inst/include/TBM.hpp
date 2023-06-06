@@ -100,26 +100,23 @@ public:
     dxdt[j+3]  = sigma * x[j+2] - delta * x[j+3] - mu * x[j+3] -  mu_tb * x[j+3];
     dxdt[j+4]  = delta * x[j+3] + gamma * x[j+5] - phi * x[j+4] - mu * x[j+4] - mu_tb * x[j+4];
     dxdt[j+5]  = (1 - varepsilon * omega) * phi * x[j+4]
-               + tau_0 * (1-c_r0) * (1 - xi) * x[j+6] 
-               + tau_1 * (1-c_r1) * x[j+15] + chi_r * x[j+15]
                - gamma * x[j+5] - mu * x[j+5] - mu_tb * x[j+5];
     dxdt[j+6]  = varepsilon * omega  * phi * (1 - m_n) * x[j+4] + varrho * x[6] - tau_0 * x[j+6] - mu * x[j+6];
     dxdt[j+7]  = x[j+12] * r_0 + x[j+13] * r_1 + x[j+14] * r_3 - sigma * x[j+7] - mu * x[j+7] - mu_tb * x[j+7];
     dxdt[j+8]  = sigma * x[j+7] - delta * x[j+8] - mu * x[j+8] - mu_tb * x[j+8];
     dxdt[j+9]  = delta * x[j+8] + gamma * x[j+10] - phi * x[j+9] - mu * x[j+9] - mu_tb * x[j+9];
     dxdt[j+10] = (1 - varepsilon * omega) * phi * x[j+9] 
-               + tau_0 * (1 - c_r0) * (1 - xi) * x[j+11] 
-               + tau_1 * (1 - c_r1) * x[j+16] + chi_r * x[j+16]
                - gamma * x[j+10] - mu * x[j+10] - mu_tb * x[j+10];
-    dxdt[j+11] = varepsilon * omega  * phi * (1 - m_r) * x[j+9] + varrho * x[11] - tau_0 * x[j+11] - mu * x[j+11];
+    dxdt[j+11] = varepsilon * omega * phi * (1 - m_r) * x[j+9] + varrho * x[11] - tau_0 * x[j+11] - mu * x[j+11];
     dxdt[j+12] = varsigma * x[j+13] - r_0 * x[j+12] - mu * x[j+12];
     dxdt[j+13] = tau_1 * c_r1 * (x[j+15] + x[j+16]) - varsigma * x[j+13] - r_1 * x[j+13] - mu * x[j+13];
-    dxdt[j+14] = tau_0 * c_r0 * (x[j+6] + x[j+11]) - r_3 * x[j+14] - mu * x[j+14];
+    dxdt[j+14] = tau_0 * (1 - xi) * (x[j+6] + x[j+11]) - r_3 * x[j+14] - mu * x[j+14]
+               + tau_1 * (1 - c_r1) * (x[j+15] + x[j+16]);
     dxdt[j+15] = phi * varepsilon * omega * m_n * x[j+4]
-               + tau_0 * (1 - c_r0) * xi * x[j+6]
+               + tau_0 * xi * x[j+6]
                - (tau_1 + chi_r) * x[j+15] - mu * x[j+15];
     dxdt[j+16] = phi * varepsilon * omega * m_r * x[j+9]
-               + tau_0 * (1 - c_r0) * xi * x[j+11]
+               + tau_0 * xi * x[j+11]
                - (tau_1 + chi_r) * x[j+16] - mu * x[j+16];
     // extra states to track
     dxdt[j+17] = delta * (x[3] + x[8] + x[j+3] + x[j+8]); // notifications
