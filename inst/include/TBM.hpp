@@ -121,5 +121,7 @@ public:
     dxdt[j+16] = phi * varepsilon * omega * m_r * x[j+9]
                + tau_0 * (1 - c_r0) * xi * x[j+11]
                - (tau_1 + chi_r) * x[j+16] - mu * x[j+16];
+    // extra states to track
+    dxdt[j+17] = delta * (x[3] + x[8] + x[j+3] + x[j+8]); // notifications
   }
 };

@@ -8,6 +8,9 @@ Type objective_function<Type>::operator()() {
   DATA_SCALAR(tmax);
   DATA_SCALAR(dt);
   DATA_VECTOR(nullid); // indices of parameters in null case
+  DATA_VECTOR(noti); // notification rate / 100.000
+  DATA_VECTOR(year); // year of the notification in original format eg... 1999
+
   // transform for sampling
     PARAMETER(log_beta_s);  // 4.4
     Type beta_s(exp(log_beta_s));
@@ -128,6 +131,14 @@ Type objective_function<Type>::operator()() {
   ODE<Type, TB<Type> > mod(equ, pars, asDouble(tmax), asDouble(dt)); // rerun with eq as init
   // extract notification
   matrix<double> out = mod.out(); // get the equilibrium
+  vector<double> ept = out.row(14+17);
+  // calculate the likelihood
+  Type offset = 1970;
+  for (int i = 0; i < noti.size(); i++) {
+    int idx = asDouble(year[i] - offset);
+    Type epti = ept[idx];
+    dll -= dnorm(log(noti[i]), log(epti), sdlog, true) + log(noti[i]);
+  }
   REPORT(mod0.track);
   REPORT(mod.track);
   REPORT(out0);
