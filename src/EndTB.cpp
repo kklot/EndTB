@@ -7,10 +7,130 @@ Type objective_function<Type>::operator()() {
   DATA_VECTOR(init); // initial conds
   DATA_SCALAR(tmax);
   DATA_SCALAR(dt);
-  PARAMETER_VECTOR(pars);
-  ODE<Type, TB<Type> > ode(init, pars, asDouble(tmax), asDouble(dt));
-  matrix<double> out = ode.out();
-  REPORT(ode.track);
+  DATA_VECTOR(nullid); // indices of parameters in null case
+  // transform for sampling
+    PARAMETER(log_beta_s);  // 4.4
+    Type beta_s(exp(log_beta_s));
+    dll -= dnorm(log_beta_s, Type(log(5) - .5 * .75 * .75), Type(.75), true) + log_beta_s;
+    
+    PARAMETER(log_beta_r); // 12 
+    Type beta_r(exp(log_beta_r));
+    dll -= dnorm(log_beta_r, Type(log(5) - .5 * .75 * .75), Type(.75), true) + log_beta_r;
+    
+    PARAMETER(log_kappa); // U(0.1 – 10) 
+    Type kappa(exp(log_kappa));
+    dll -= dnorm(log_kappa, Type(log(5) - .5 * .75 * .75), Type(.75), true) + log_kappa;
+
+    PARAMETER(log_b); 
+    Type b(exp(log_b));
+
+    PARAMETER(log_mu); 
+    Type mu(exp(log_mu));
+
+    PARAMETER(logit_mu_tb); // 0.2
+    Type mu_tb(invlogit(logit_mu_tb));
+    dll -= log(mu_tb) +  log(1 - mu_tb);
+    dll -= dbeta(mu_tb, Type(2.5), Type(10), true);
+
+    PARAMETER(log_theta_s);
+    Type theta_s(exp(log_theta_s));
+
+    PARAMETER(log_theta_r);
+    Type theta_r(exp(log_theta_r));
+
+    PARAMETER(log_rho);
+    Type rho(exp(log_rho));
+
+    PARAMETER(log_sigma); // 7.9 (95% CrI 3.7-11.8) 
+    Type sigma(exp(log_sigma));
+    dll -= dnorm(log_sigma, Type(log(5) - .5 * .75 * .75), Type(.75), true) + log_sigma;
+
+    PARAMETER(log_delta); // (95% CrI 2.7-11.5)
+    Type delta(exp(log_delta));
+    dll -= dnorm(log_delta, Type(log(5) - .5 * .75 * .75), Type(.75), true) + log_delta;
+    
+    PARAMETER(log_gamma); // 12 (95% CrI 8.5-15) 
+    Type gamma(exp(log_gamma));
+    dll -= dnorm(log_gamma, Type(log(5) - .5 * .75 * .75), Type(.75), true) + log_gamma;
+
+    PARAMETER(log_phi);
+    Type phi(exp(log_phi));
+
+    PARAMETER(log_varepsilon);
+    Type varepsilon(exp(log_varepsilon));
+
+    PARAMETER(log_omega);
+    Type omega(exp(log_omega));
+
+    PARAMETER(log_tau_0);
+    Type tau_0(exp(log_tau_0));
+
+    PARAMETER(log_tau_1);
+    Type tau_1(exp(log_tau_1));
+
+    PARAMETER(log_chi_s);
+    Type chi_s(exp(log_chi_s));
+
+    PARAMETER(log_chi_r);
+    Type chi_r(exp(log_chi_r));
+
+    PARAMETER(logit_varrho); // 0.05 (95% CrI 0.005-0.09)
+    Type varrho(invlogit(logit_varrho));
+    dll -= log(varrho) +  log(1 - varrho);
+    dll -= dbeta(varrho, Type(0.5), Type(10), true);
+
+    PARAMETER(log_r_0);
+    Type r_0(exp(log_r_0));
+
+    PARAMETER(log_r_1);
+    Type r_1(exp(log_r_1));
+
+    PARAMETER(log_r_2);
+    Type r_2(exp(log_r_2));
+
+    PARAMETER(log_r_3);
+    Type r_3(exp(log_r_3));
+
+    PARAMETER(log_varsigma);
+    Type varsigma(exp(log_varsigma));
+
+    PARAMETER(log_c_s0);
+    Type c_s0(exp(log_c_s0));
+
+    PARAMETER(log_c_r0);
+    Type c_r0(exp(log_c_r0));
+
+    PARAMETER(log_c_r1);
+    Type c_r1(exp(log_c_r1));
+
+    PARAMETER(log_m_n);
+    Type m_n(exp(log_m_n));
+
+    PARAMETER(log_m_r);
+    Type m_r(exp(log_m_r));
+
+    PARAMETER(log_xi);
+    Type xi(exp(log_xi));
+
+    vector<Type> pars(32);
+    pars << Type(23842802), beta_s, beta_r, kappa, b, mu, mu_tb, theta_s, theta_r, rho, sigma, delta, gamma, phi, varepsilon, omega, tau_0, tau_1, chi_s, chi_r, varrho, r_0, r_1, r_2, r_3, varsigma, c_s0, c_r0, c_r1, m_n, m_r, xi;
+
+    PARAMETER(log_sdlog); // half normal - shrink towards zero
+    Type sdlog(exp(log_sdlog));
+    dll -= dnorm(sdlog, Type(0), Type(2.5), true) + log_sdlog;
+
+  vector<Type> pars_null = pars; // to flexibly change the index
+  for (int i = 0; i < nullid.size(); i++) pars_null[i] = Type(0); // set zero to health system parameters
+  ODE<Type, TB<Type> > mod0(init, pars_null, asDouble(tmax), asDouble(dt)); // run steady state 
+  matrix<double> out0 = mod0.out(); // get the equilibrium
+  vector<Type> equ = init; // get new init excluding time
+  for (int i = 0; i < equ.size(); i++) equ[i] = out0.col(out0.cols())[i+1]; // last col
+  ODE<Type, TB<Type> > mod(equ, pars, asDouble(tmax), asDouble(dt)); // rerun with eq as init
+  // extract notification
+  matrix<double> out = mod.out(); // get the equilibrium
+  REPORT(mod0.track);
+  REPORT(mod.track);
+  REPORT(out0);
   REPORT(out);
   return dll;
 }
