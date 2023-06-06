@@ -85,23 +85,23 @@ public:
     dxdt[3]  = sigma * x[2] - delta * x[3] - mu * x[3] - mu_tb * x[3];
     dxdt[4]  = delta * x[3] + gamma * x[5] - phi * x[4] - mu * x[4] - mu_tb * x[4];
     dxdt[5]  = (1 - varepsilon * omega) * phi * x[4] - gamma * x[5] - mu * x[5] - mu_tb * x[5];
-    dxdt[6]  = varepsilon * omega  * phi * x[4] - (tau_0 + chi_s + varrho) * x[6] - mu * x[6];
+    dxdt[6]  = varepsilon * omega * phi * x[4] - (tau_0 + chi_s + varrho) * x[6] - mu * x[6];
     dxdt[7]  = x[12] * r_0 + x[13] * r_1 + x[14] * r_2 - sigma * x[7] - mu * x[7] - mu_tb * x[7];
     dxdt[8]  = sigma * x[7] - delta * x[8] - mu * x[8] - mu_tb * x[8];
     dxdt[9]  = delta * x[8] + gamma * x[10] - phi * x[9] - mu * x[9] - mu_tb * x[9];
     dxdt[10] = (1 - varepsilon * omega) * phi * x[9] - gamma * x[10] - mu * x[10] - mu_tb * x[10];
-    dxdt[11] = varepsilon * omega  * phi * x[9] - (tau_0 + chi_s + varrho) * x[11] - mu * x[11];
+    dxdt[11] = varepsilon * omega * phi * x[9] - (tau_0 + chi_s + varrho) * x[11] - mu * x[11];
     dxdt[12] = varsigma * (x[13] + x[14]) - r_0 * x[12] - mu * x[12];
-    dxdt[13] =          tau_0 *      c_s0   * (x[6] + x[11]) - varsigma * x[13] - r_1 * x[13] - mu * x[13];
+    dxdt[13] =          tau_0 *      c_s0  * (x[6] + x[11]) - varsigma * x[13] - r_1 * x[13] - mu * x[13];
     dxdt[14] = (chi_s + tau_0 * (1 - c_s0)) * (x[6] + x[11]) - varsigma * x[14] - r_2 * x[14] - mu * x[14];
     // MDR
     dxdt[j+1]  = (1 - theta_r) * lambda_r * x[0] - rho * x[j+1] - mu * x[j+1];
     dxdt[j+2]  = theta_r * lambda_r * x[0] + rho * x[j+1] - sigma * x[j+2] - mu * x[j+2] - mu_tb * x[j+2];
-    dxdt[j+3]  = sigma * x[j+2] - delta * x[j+3] - mu * x[j+3] -  mu_tb * x[j+3];
+    dxdt[j+3]  = sigma * x[j+2] - delta * x[j+3] - mu * x[j+3] - mu_tb * x[j+3];
     dxdt[j+4]  = delta * x[j+3] + gamma * x[j+5] - phi * x[j+4] - mu * x[j+4] - mu_tb * x[j+4];
     dxdt[j+5]  = (1 - varepsilon * omega) * phi * x[j+4]
                - gamma * x[j+5] - mu * x[j+5] - mu_tb * x[j+5];
-    dxdt[j+6]  = varepsilon * omega  * phi * (1 - m_n) * x[j+4] + varrho * x[6] - tau_0 * x[j+6] - mu * x[j+6];
+    dxdt[j+6]  = varepsilon * omega * phi * (1 - m_n) * x[j+4] + varrho * x[6] - tau_0 * x[j+6] - mu * x[j+6];
     dxdt[j+7]  = x[j+12] * r_0 + x[j+13] * r_1 + x[j+14] * r_3 - sigma * x[j+7] - mu * x[j+7] - mu_tb * x[j+7];
     dxdt[j+8]  = sigma * x[j+7] - delta * x[j+8] - mu * x[j+8] - mu_tb * x[j+8];
     dxdt[j+9]  = delta * x[j+8] + gamma * x[j+10] - phi * x[j+9] - mu * x[j+9] - mu_tb * x[j+9];
