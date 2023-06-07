@@ -124,6 +124,6 @@ public:
                + tau_0 * xi * x[j+11]
                - (tau_1 + chi_r) * x[j+16] - mu * x[j+16];
     // extra states to track
-    dxdt[j+17] = delta * (x[3] + x[8] + x[j+3] + x[j+8]); // notifications
+    dxdt[j+17] = delta * (x[3] + x[8] + x[j+3] + x[j+8]) - x[j+17]; // notifications
   }
 };
