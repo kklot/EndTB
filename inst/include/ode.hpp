@@ -9,7 +9,7 @@ struct ODE {
   state_type x;
   runge_kutta4<state_type> stepper; // TODO: let this changable
   M model;
-  vector<double> track;
+  vector<double> track; // TODO: change from CppAD to std::vector or Eigen's
   ODE(){};
   ODE(vector<T> init, vector<T> pars, double tmax, double dt) :
     n_state(init.size()), // N
@@ -18,6 +18,7 @@ struct ODE {
     model(pars),
     track((n_state + 1) * (n_time + 1)) // +1 column to store time steps
   {
+    track.setZero();
     // copy starting time
     memcpy(&x[0], &init[0], n_state * sizeof(double));
     *(&track(0)) = 0.0;
