@@ -132,21 +132,24 @@ Type objective_function<Type>::operator()() {
     dll -= dnorm(sdlog, Type(0), Type(2.5), true) + log_sdlog;
 
   vector<Type> pars_null = pars; // to flexibly change the index
-  for (int i = 0; i < nullid.size(); i++) pars_null[i] = Type(0); // set zero to health system parameters
+  for (int i = 0; i < nullid.size(); i++) {
+    int idx = asDouble(nullid[i]); // is there a way to cast the index directly
+    pars_null[idx] = Type(0); // set zero to health system parameters
+  }
   ODE<Type, TB<Type> > mod0(init, pars_null, asDouble(tmax), asDouble(dt)); // run steady state 
   matrix<double> out0 = mod0.out(); // get the equilibrium
-  vector<Type> equ = init; // get new init excluding time
-  for (int i = 0; i < equ.size(); i++) equ[i] = out0.col(out0.cols())[i+1]; // last col
-  ODE<Type, TB<Type> > mod(equ, pars, asDouble(tmax), asDouble(dt)); // rerun with eq as init
+  vector<double> eqVec = out0(Eigen::seqN(1, init.size()), Eigen::last);
+  vector<Type> eqVecT = Double2Type<Type>(eqVec); 
+  eqVecT = eqVecT * (pop1970 / eqVecT.sum()); // adjust to target pop
+  ODE<Type, TB<Type> > mod(eqVecT, pars, 60, 0.01); // rerun with eq as init, first time point represents 1970
   // extract notification
   matrix<double> out = mod.out(); // get the equilibrium
-  vector<double> ept = out.row(14+17);
+  vector<Type> ept = Double2Type<Type>(out.row(14+17)); // index of notification
+  ept = (ept / pop1970) * 1e5; // constant pop
   // calculate the likelihood
-  Type offset = 1970;
   for (int i = 0; i < noti.size(); i++) {
-    int idx = asDouble(year[i] - offset);
-    Type epti = ept[idx];
-    dll -= dnorm(log(noti[i]), log(epti), sdlog, true) + log(noti[i]);
+    int idx = asDouble((year[i] - 1970) * 100); // 1/0.01
+    dll -= dnorm(log(noti[i]), log(ept[idx]), sdlog, true);
   }
   REPORT(mod0.track);
   REPORT(mod.track);
