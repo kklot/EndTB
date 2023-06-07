@@ -16,7 +16,7 @@ struct ODE {
     n_time(tmax / dt), // 
     x(n_state), // |state1|state2|...|stateN|
     model(pars),
-    track((n_state + 1) * (n_time + 1)) // +1 column to store time steps
+    track((n_state + 1) * n_time) // +1 column to store time steps
   {
     track.setZero();
     // copy starting time
@@ -39,7 +39,7 @@ struct ODE {
     // ...
     // |stateN|stateN|stateN|...|stateN|
     matrix<double> ans = track.matrix();
-    ans.resize(n_state + 1, n_time + 1);
+    ans.resize(n_state + 1, n_time);
     return ans;
   };
 };
