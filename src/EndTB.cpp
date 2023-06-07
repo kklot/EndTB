@@ -2,6 +2,14 @@
 #include <TBM.hpp>
 
 template <class Type>
+vector<Type> Double2Type(vector<double> x){
+  vector<Type> y(x.size());
+  double * px = x.data();
+  for(int i=0;i<x.size();i++) y[i] = Type(*(px + i));
+  return y;
+}
+
+template <class Type>
 Type objective_function<Type>::operator()() {
   Type dll = 0.0;
   DATA_VECTOR(init); // initial conds
