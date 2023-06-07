@@ -14,6 +14,7 @@ Type objective_function<Type>::operator()() {
   Type dll = 0.0;
   DATA_VECTOR(init); // initial conds
   DATA_SCALAR(tmax);
+  DATA_SCALAR(pop1970);
   DATA_SCALAR(dt);
   DATA_VECTOR(nullid); // indices of parameters in null case
   DATA_VECTOR(noti); // notification rate / 100.000
@@ -124,7 +125,7 @@ Type objective_function<Type>::operator()() {
     Type xi(exp(log_xi));
 
     vector<Type> pars(32);
-    pars << Type(23842802), beta_s, beta_r, kappa, b, mu, mu_tb, theta_s, theta_r, rho, sigma, delta, gamma, phi, varepsilon, omega, tau_0, tau_1, chi_s, chi_r, varrho, r_0, r_1, r_2, r_3, varsigma, c_s0, c_r0, c_r1, m_n, m_r, xi;
+    pars << pop1970, beta_s, beta_r, kappa, b, mu, mu_tb, theta_s, theta_r, rho, sigma, delta, gamma, phi, varepsilon, omega, tau_0, tau_1, chi_s, chi_r, varrho, r_0, r_1, r_2, r_3, varsigma, c_s0, c_r0, c_r1, m_n, m_r, xi;
 
     PARAMETER(log_sdlog); // half normal - shrink towards zero
     Type sdlog(exp(log_sdlog));

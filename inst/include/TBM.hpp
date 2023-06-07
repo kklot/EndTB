@@ -72,17 +72,18 @@ public:
     xi         (asDouble(pars[31]))
   {}
   void operator()(const state_type &x, state_type &dxdt, const double /* t */) {
+    double Nt = 0; // this should not be needed
+    for (int i = 0; i < j + 16; i++) Nt += x[i]; // exclude notification from normal states
     // FOI
     double 
-    Nt = std::accumulate(x.begin(), x.end(), 0),
-    lambda_s = beta_s / Nt * (x[2] + x[3] + x[7] + x[8] + kappa * (x[4] + x[5] + x[9] + x[10])),
-    lambda_r = beta_r / Nt * (x[j+2] + x[j+3] + x[j+7] + x[j+8] + kappa * (x[j+4] + x[j+5] + x[j+9] + x[j+10])), 
-    bzero = mu * Nt + mu_tb * (
-      x[2] + x[3] + x[4] + x[5] + x[7] + x[8] + x[9] + x[10] + 
-      x[j+2] + x[j+3] + x[j+4] + x[j+5] + x[j+7] + x[j+8] + x[j+9] + x[j+10]
-    ); // balancing birth rate 
+      lambda_s = (beta_s * (x[2] + x[3] + x[7] + x[8] + kappa * (x[4] + x[5] + x[9] + x[10]))) / Nt,
+      lambda_r = (beta_r * (x[j+2] + x[j+3] + x[j+7] + x[j+8] + kappa * (x[j+4] + x[j+5] + x[j+9] + x[j+10]))) / Nt, 
+      bzero = mu * Nt + mu_tb * (
+        x[2] + x[3] + x[4] + x[5] + x[7] + x[8] + x[9] + x[10] + 
+        x[j+2] + x[j+3] + x[j+4] + x[j+5] + x[j+7] + x[j+8] + x[j+9] + x[j+10]
+      ); // balancing birth rate 
     // DEs
-    dxdt[0]  = bzero * N - (lambda_r + lambda_s) * x[0] - mu * x[0];
+    dxdt[0]  = bzero - (lambda_r + lambda_s) * x[0] - mu * x[0];
     // Sensitive
     dxdt[1]  = (1 - theta_s) * lambda_s * x[0] - rho * x[1] - mu * x[1];
     dxdt[2]  = theta_s * lambda_s * x[0] + rho * x[1] - sigma * x[2] - mu * x[2] - mu_tb * x[2];
