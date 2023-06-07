@@ -82,7 +82,6 @@ init_moldova <- c(
     DS1 = 0,
     ES1 = 0,
     FS1 = 0,
-    LS2 = 0,
     AS2 = 0,
     IS2 = 0,
     DS2 = 0,
@@ -91,14 +90,12 @@ init_moldova <- c(
     RS0 = 0,
     RS1 = 0,
     RS2 = 0,
-    # MDR
-    LR1 = 0,
+    LR1 = 0, # MDR
     AR1 = 0,
     IR1 = 0,
     DR1 = 0,
     ER1 = 0,
     FR1 = 0,
-    LR2 = 0,
     AR2 = 0,
     IR2 = 0,
     DR2 = 0,
@@ -108,7 +105,8 @@ init_moldova <- c(
     RR1 = 0,
     RR2 = 0,
     G1 = 0,
-    G2 = 0
+    G2 = 0, 
+    NOT = 0
 )
 
 states_moldova <- c(
@@ -119,7 +117,6 @@ states_moldova <- c(
     DS1 = "Sen-1st-Presented",
     ES1 = "Sen-1st-Seekcare",
     FS1 = "Sen-1st-Treat",
-    LS2 = "Sen-2nd-Latent",
     AS2 = "Sen-2nd-Asymptomatic",
     IS2 = "Sen-2nd-Symptomatic",
     DS2 = "Sen-2nd-Presented",
@@ -134,7 +131,6 @@ states_moldova <- c(
     DR1 = "Res-1st-Presented",
     ER1 = "Res-1st-Seekcare",
     FR1 = "Res-1st-Treat",
-    LR2 = "Res-2nd-Latent",
     AR2 = "Res-2nd-Asymptomatic",
     IR2 = "Res-2nd-Symptomatic",
     DR2 = "Res-2nd-Presented",
@@ -142,5 +138,8 @@ states_moldova <- c(
     FR2 = "Res-2nd-Treat",
     RR0 = "Res-2nd-Recover-Stable",
     RR1 = "Res-2nd-Relapse-Low",
-    RR2 = "Res-2nd-Relapse-High"
+    RR2 = "Res-2nd-Relapse-High",
+    G1  = "Res-1st-1st",
+    G2  = "Res-1st-2nd",
+    NOT = "Notifications"
 )
