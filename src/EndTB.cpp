@@ -134,6 +134,10 @@ Type objective_function<Type>::operator()() {
     Type sdlog(exp(log_sdlog));
     dll -= dnorm(sdlog, Type(0), Type(2.5), true) + log_sdlog;
 
+    PARAMETER(log_sdlog_m); // half normal - shrink towards zero
+    Type sdlog_m(exp(log_sdlog_m));
+    dll -= dnorm(sdlog_m, Type(0), Type(2.5), true) + log_sdlog_m;
+
   vector<Type> pars_null = pars; // to flexibly change the index
   for (int i = 0; i < nullid.size(); i++) {
     int idx = asDouble(nullid[i]); // is there a way to cast the index directly
