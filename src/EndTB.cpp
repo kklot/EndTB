@@ -166,8 +166,8 @@ Type objective_function<Type>::operator()() {
     int idx = asDouble((year[i] - year_zero) * 100); // 1/0.01
     ill(i, 0) = log(noti[i]);
     ill(i, 1) = log(ept[i]);
-    ill(i, 2) = dnorm(log(noti[i]), log(ept[idx]), sdlog, true);
-    dll      -= dnorm(log(noti[i]), log(ept[idx]), sdlog, true);
+    ill(i, 2) = dnorm(log(noti[i]+DBL_EPSILON), log(ept[idx]+DBL_EPSILON), sdlog, true);
+    dll      -= dnorm(log(noti[i]+DBL_EPSILON), log(ept[idx]+DBL_EPSILON), sdlog, true);
   }
 
   // calculate the likelihood of mortality
@@ -175,8 +175,8 @@ Type objective_function<Type>::operator()() {
     int idx = asDouble((mortality_year[i] - year_zero) * 100); // 1/0.01
     mll(i, 0) = log(mortality[i]);
     mll(i, 1) = log(emr[i]);
-    mll(i, 2) = dnorm(log(mortality[i]), log(emr[idx]), sdlog_m, true);
-    dll      -= dnorm(log(mortality[i]), log(emr[idx]), sdlog_m, true);
+    mll(i, 2) = dnorm(log(mortality[i]+DBL_EPSILON), log(emr[idx]+DBL_EPSILON), sdlog_m, true);
+    dll      -= dnorm(log(mortality[i]+DBL_EPSILON), log(emr[idx]+DBL_EPSILON), sdlog_m, true);
   }
   REPORT(out0);
   REPORT(out);
