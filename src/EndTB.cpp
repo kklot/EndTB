@@ -15,10 +15,13 @@ Type objective_function<Type>::operator()() {
   DATA_VECTOR(init); // initial conds
   DATA_SCALAR(tmax);
   DATA_SCALAR(pop1970);
+  DATA_SCALAR(year_zero); // maybe estimate this
   DATA_SCALAR(dt);
   DATA_VECTOR(nullid); // indices of parameters in null case
   DATA_VECTOR(noti); // notification rate / 100.000
   DATA_VECTOR(year); // year of the notification in original format eg... 1999
+  DATA_VECTOR(mortality); // mortality rate / 100K from CID
+  DATA_VECTOR(mortality_year); // coresponding year - 1990....
 
   // transform for sampling
     PARAMETER(log_beta_s);  // 4.4
@@ -145,14 +148,31 @@ Type objective_function<Type>::operator()() {
   // extract notification
   matrix<double> out = mod.out(); // get the equilibrium
   vector<Type> ept = Double2Type<Type>(out.row(14+17)); // index of notification
+  vector<Type> emr = Double2Type<Type>(out.row(14+18)); // index of notification
+  // Expected rate per 100.000
   ept = (ept / pop1970) * 1e5; // constant pop
+  emr = (emr / pop1970) * 1e5; // constant pop
+  
   // calculate the likelihood
+  matrix<Type> ill(noti.size(), 3);
+  matrix<Type> mll(mortality.size(), 3);
+
   for (int i = 0; i < noti.size(); i++) {
-    int idx = asDouble((year[i] - 1970) * 100); // 1/0.01
-    dll -= dnorm(log(noti[i]), log(ept[idx]), sdlog, true);
+    int idx = asDouble((year[i] - year_zero) * 100); // 1/0.01
+    ill(i, 0) = log(noti[i]);
+    ill(i, 1) = log(ept[i]);
+    ill(i, 2) = dnorm(log(noti[i]), log(ept[idx]), sdlog, true);
+    dll      -= dnorm(log(noti[i]), log(ept[idx]), sdlog, true);
   }
-  REPORT(mod0.track);
-  REPORT(mod.track);
+
+  // calculate the likelihood of mortality
+  for (int i = 0; i < mortality.size(); i++) {
+    int idx = asDouble((mortality_year[i] - year_zero) * 100); // 1/0.01
+    mll(i, 0) = log(mortality[i]);
+    mll(i, 1) = log(emr[i]);
+    mll(i, 2) = dnorm(log(mortality[i]), log(emr[idx]), sdlog_m, true);
+    dll      -= dnorm(log(mortality[i]), log(emr[idx]), sdlog_m, true);
+  }
   REPORT(out0);
   REPORT(out);
   return dll;

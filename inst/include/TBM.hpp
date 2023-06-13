@@ -125,5 +125,8 @@ public:
                - (tau_1 + chi_r) * x[j+16] - mu * x[j+16];
     // extra states to track
     dxdt[j+17] = delta * (x[3] + x[8] + x[j+3] + x[j+8]) - x[j+17]; // notifications
+    dxdt[j+18] = mu_tb * (x[2] + x[3] + x[4] + x[5] + x[7] + x[8] + x[9] + x[10] + 
+                          x[j+2] + x[j+3] + x[j+4] + x[j+5] + x[j+7] + x[j+8] + x[j+9] + x[j+10]) -
+                   x[j+18]; // mortality
   }
 };

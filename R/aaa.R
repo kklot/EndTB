@@ -106,7 +106,8 @@ init_moldova <- c(
     RR2 = 0,
     G1 = 0,
     G2 = 0, 
-    NOT = 0
+    NOT = 0,
+    MOR = 0
 )
 
 states_moldova <- c(
@@ -141,5 +142,6 @@ states_moldova <- c(
     RR2 = "Res-2nd-Relapse-High",
     G1  = "Res-1st-1st",
     G2  = "Res-1st-2nd",
-    NOT = "Notifications"
+    NOT = "Notifications",
+    NOT = "Mortality"
 )
