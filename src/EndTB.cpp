@@ -148,8 +148,9 @@ Type objective_function<Type>::operator()() {
   vector<double> eqVec = out0(Eigen::seqN(1, init.size()), Eigen::last);
   vector<Type> eqVecT = Double2Type<Type>(eqVec); 
   eqVecT = eqVecT * (pop1970 / eqVecT.sum()); // adjust to target pop
-  ODE<Type, TB<Type> > mod(eqVecT, pars, 60, 0.01); // rerun with eq as init, first time point represents 1970
-  // extract notification
+  ODE<Type, TB<Type>> mod(eqVecT, pars, asDouble(2030 - year_zero), 0.01); // rerun with eq as init, first time point represents 1970: maybe not?
+
+  // extract expected data
   matrix<double> out = mod.out(); // get the equilibrium
   vector<Type> ept = Double2Type<Type>(out.row(14+17)); // index of notification
   vector<Type> emr = Double2Type<Type>(out.row(14+18)); // index of notification
