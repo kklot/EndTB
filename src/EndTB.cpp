@@ -26,15 +26,15 @@ Type objective_function<Type>::operator()() {
   // transform for sampling
     PARAMETER(log_beta_s);  // 4.4
     Type beta_s(exp(log_beta_s));
-    dll -= dnorm(log_beta_s, Type(log(5) - .5 * .75 * .75), Type(.75), true) + log_beta_s;
+    dll -= dnorm(beta_s, Type(0), Type(10), true) + log_beta_s;
     
     PARAMETER(log_beta_r); // 12 
     Type beta_r(exp(log_beta_r));
-    dll -= dnorm(log_beta_r, Type(log(5) - .5 * .75 * .75), Type(.75), true) + log_beta_r;
+    dll -= dnorm(beta_r, Type(0), Type(10), true) + log_beta_r;
     
     PARAMETER(log_kappa); // U(0.1 – 10) 
     Type kappa(exp(log_kappa));
-    dll -= dnorm(log_kappa, Type(log(5) - .5 * .75 * .75), Type(.75), true) + log_kappa;
+    dll -= dnorm(kappa, Type(0), Type(10), true) + log_kappa;
 
     PARAMETER(log_b); 
     Type b(exp(log_b));
@@ -58,15 +58,15 @@ Type objective_function<Type>::operator()() {
 
     PARAMETER(log_sigma); // 7.9 (95% CrI 3.7-11.8) 
     Type sigma(exp(log_sigma));
-    dll -= dnorm(log_sigma, Type(log(5) - .5 * .75 * .75), Type(.75), true) + log_sigma;
+    dll -= dnorm(sigma, Type(0), Type(10), true) + log_sigma;
 
     PARAMETER(log_delta); // (95% CrI 2.7-11.5)
     Type delta(exp(log_delta));
-    dll -= dnorm(log_delta, Type(log(5) - .5 * .75 * .75), Type(.75), true) + log_delta;
+    dll -= dnorm(delta, Type(0), Type(10), true) + log_delta;
     
     PARAMETER(log_gamma); // 12 (95% CrI 8.5-15) 
     Type gamma(exp(log_gamma));
-    dll -= dnorm(log_gamma, Type(log(5) - .5 * .75 * .75), Type(.75), true) + log_gamma;
+    dll -= dnorm(gamma, Type(0), Type(10), true) + log_gamma;
 
     PARAMETER(log_phi);
     Type phi(exp(log_phi));
