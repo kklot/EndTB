@@ -83,22 +83,22 @@ public:
         x[j+2] + x[j+3] + x[j+4] + x[j+5] + x[j+7] + x[j+8] + x[j+9] + x[j+10]
       ); // balancing birth rate 
     // DEs
-    dxdt[0]  = bzero - (lambda_r + lambda_s) * x[0] - mu * x[0];
+    dxdt[0]  = bzero - (lambda_r + lambda_s) * x[0]                - mu*x[0];
     // Sensitive
-    dxdt[1]  = (1 - theta_s) * lambda_s * x[0] - rho * x[1] - mu * x[1];
-    dxdt[2]  = theta_s * lambda_s * x[0] + rho * x[1] - sigma * x[2] - mu * x[2] - mu_tb * x[2];
-    dxdt[3]  = sigma * x[2] - delta * x[3] - mu * x[3] - mu_tb * x[3];
-    dxdt[4]  = delta * x[3] + gamma * x[5] - phi * x[4] - mu * x[4] - mu_tb * x[4];
-    dxdt[5]  = (1 - varepsilon * omega) * phi * x[4] - gamma * x[5] - mu * x[5] - mu_tb * x[5];
-    dxdt[6]  = varepsilon * omega * phi * x[4] - (tau_0 + chi_s + varrho) * x[6] - mu * x[6];
-    dxdt[7]  = x[12] * r_0 + x[13] * r_1 + x[14] * r_2 - sigma * x[7] - mu * x[7] - mu_tb * x[7];
-    dxdt[8]  = sigma * x[7] - delta * x[8] - mu * x[8] - mu_tb * x[8];
-    dxdt[9]  = delta * x[8] + gamma * x[10] - phi * x[9] - mu * x[9] - mu_tb * x[9];
-    dxdt[10] = (1 - varepsilon * omega) * phi * x[9] - gamma * x[10] - mu * x[10] - mu_tb * x[10];
-    dxdt[11] = varepsilon * omega * phi * x[9] - (tau_0 + chi_s + varrho) * x[11] - mu * x[11];
-    dxdt[12] = varsigma * (x[13] + x[14]) - r_0 * x[12] - mu * x[12];
-    dxdt[13] =          tau_0 *      c_s0  * (x[6] + x[11]) - varsigma * x[13] - r_1 * x[13] - mu * x[13];
-    dxdt[14] = (chi_s + tau_0 * (1 - c_s0)) * (x[6] + x[11]) - varsigma * x[14] - r_2 * x[14] - mu * x[14];
+    dxdt[1]  = (1 - theta_s)*lambda_s*x[0] - rho*x[1]              - mu*x[1];
+    dxdt[2]  =      theta_s *lambda_s*x[0] + rho*x[1] - sigma*x[2] - mu*x[2] - mu_tb*x[2];
+    dxdt[3]  = -delta*x[3]                            + sigma*x[2] - mu*x[3] - mu_tb*x[3];
+    dxdt[4]  =  delta*x[3] + gamma*x[5]                            - mu*x[4] - mu_tb*x[4]                        - phi*x[4];
+    dxdt[5]  =             - gamma*x[5]                            - mu*x[5] - mu_tb*x[5] + (1 - varepsilon*omega)*phi*x[4];
+    dxdt[6]  = -(tau_0 + chi_s + varrho)*x[6]                      - mu*x[6]              +      varepsilon*omega *phi*x[4];
+    dxdt[7]  =                                   - sigma*x[7]      - mu*x[7] - mu_tb*x[7] + x[12]*r_0 + x[13]*r_1 + x[14]*r_2;
+    dxdt[8]  = -delta*x[8]                       + sigma*x[7]      - mu*x[8] - mu_tb*x[8];
+    dxdt[9]  =  delta*x[8] + gamma*x[10]                           - mu*x[9] - mu_tb*x[9]                         - phi*x[9];
+    dxdt[10] =             - gamma*x[10]                           - mu*x[10]- mu_tb*x[10] + (1 - varepsilon*omega)*phi*x[9];
+    dxdt[11] =  - (tau_0 + chi_s + varrho)*x[11]                   - mu*x[11]              +      varepsilon*omega *phi*x[9];
+    dxdt[12] =                                                     - mu*x[12]             - x[12]*r_0                         + varsigma*(x[13] + x[14]);
+    dxdt[13] =          tau_0*     c_s0  *(x[6] + x[11])           - mu*x[13]                         - x[13]*r_1             - varsigma* x[13];
+    dxdt[14] = (chi_s + tau_0*(1 - c_s0))*(x[6] + x[11])           - mu*x[14]                                     - x[14]*r_2 - varsigma*         x[14];
     // MDR
     dxdt[j+1]  = (1 - theta_r) * lambda_r * x[0] - rho * x[j+1] - mu * x[j+1];
     dxdt[j+2]  = theta_r * lambda_r * x[0] + rho * x[j+1] - sigma * x[j+2] - mu * x[j+2] - mu_tb * x[j+2];
