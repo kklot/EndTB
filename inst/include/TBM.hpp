@@ -128,5 +128,8 @@ public:
     dxdt[j+18] = mu_tb * (x[2] + x[3] + x[4] + x[5] + x[7] + x[8] + x[9] + x[10] + 
                           x[j+2] + x[j+3] + x[j+4] + x[j+5] + x[j+7] + x[j+8] + x[j+9] + x[j+10]) -
                    x[j+18]; // mortality
+    dxdt[j+19] = lambda_s - x[j+19];
+    dxdt[j+20] = lambda_r - x[j+20];
+    dxdt[j+21] = (Nt - x[0] - x[12] - x[13] - x[j+12] - x[j+13])/Nt - x[j+21]; // prevalence - cross-sectional
   }
 };
