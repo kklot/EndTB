@@ -143,12 +143,16 @@ Type objective_function<Type>::operator()() {
     int idx = asDouble(nullid[i]); // is there a way to cast the index directly
     pars_null[idx] = Type(0); // set zero to health system parameters
   }
-  ODE<Type, TB<Type> > mod0(init, pars_null, asDouble(tmax), asDouble(dt)); // run steady state 
+  
+  pars_null[19] = tmax - year_zero - 1; // move year zero backward for equi. phase
+
+  ODE<Type, NIM<Type> > mod0(init, pars_null, asDouble(tmax), dbdt); // run steady state 
   matrix<double> out0 = mod0.out(); // get the equilibrium
   vector<double> eqVec = out0(Eigen::seqN(1, init.size()), Eigen::last);
   vector<Type> eqVecT = Double2Type<Type>(eqVec); 
   eqVecT = eqVecT * (pop1970 / eqVecT.sum()); // adjust to target pop
-  ODE<Type, TB<Type>> mod(eqVecT, pars, asDouble(2030 - year_zero), 0.01); // rerun with eq as init, first time point represents 1970: maybe not?
+  
+  ODE<Type, NIM<Type>> mod(eqVecT, pars, asDouble(2030 - year_zero), dbdt); // rerun with eq as init, first time point represents 1970: maybe not?
 
   // extract expected data
   matrix<double> out = mod.out(); // get the equilibrium
