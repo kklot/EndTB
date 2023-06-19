@@ -1,4 +1,8 @@
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #include <boost/numeric/odeint.hpp>
+#pragma GCC diagnostic pop
+
 using namespace boost::numeric::odeint;
 
 typedef std::vector<double> state_type;
