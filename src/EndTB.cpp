@@ -9,6 +9,23 @@ vector<Type> Double2Type(vector<double> x){
   return y;
 }
 
+// https://mc-stan.org/docs/reference-manual/lower-bound-transform.html
+// https://discourse.mc-stan.org/t/half-normal-half-cauchy-and-half-t/17314
+template <class Type> Type half_normal(Type y, Type mu, Type sd) { return(dnorm(exp(y), mu, sd, true) + y); }
+// https://mc-stan.org/docs/stan-users-guide/changes-of-variables.html
+template <class T> T log_normal(T y, T mu, T sd) { return(dnorm(y, mu, sd, true) - y); }
+// https://github.com/kklot/naomi/blob/94d34246144e4dfcb86161258faf213a7db03268/src/tmb.cpp#L258
+template <class T> T prop_beta(T x, T a, T b) { return(log(x) - log(1 - x) + dbeta(x, a, b, true)); }
+// beta mean selection
+template <class T> T bBeta(T a, T mu) { return((a - mu * a) / mu); }
+// Gamma transform
+template <class T> T norm2gamma(T x, T a, T b) { return( qgamma(pnorm(x, T(0), T(1)), a, b) ); }
+// Lognormal likelihood
+template <class Type> Type log_normal_lpdf(Type x, Type meanlog, Type sdlog) {
+  return( - pow(log(x + DBL_EPSILON) - meanlog, 2) / (2 * sdlog * sdlog) - log(x * sdlog * sqrt(2*M_PI)) );
+}
+
+
 template <class Type>
 Type objective_function<Type>::operator()() {
   Type dll = 0.0;
