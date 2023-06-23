@@ -12,16 +12,26 @@ vector<Type> Double2Type(vector<double> x){
 template <class Type>
 Type objective_function<Type>::operator()() {
   Type dll = 0.0;
+  // Meta data
   DATA_VECTOR(init); // initial conds
   DATA_SCALAR(tmax);
   DATA_SCALAR(pop1970);
   DATA_SCALAR(year_zero); // maybe estimate this
   DATA_SCALAR(dt);
   DATA_VECTOR(nullid); // indices of parameters in null case
-  DATA_VECTOR(noti); // notification rate / 100.000
-  DATA_VECTOR(year); // year of the notification in original format eg... 1999
-  DATA_VECTOR(mortality); // mortality rate / 100K from CID
+  
+  // Target calibration
+  DATA_VECTOR(notification_year); // year of the notification in original format eg... 1999
+  DATA_VECTOR(notification_meanlog); // notification rate / 100.000
+  DATA_VECTOR(notification_sdlog); // notification rate / 100.000
   DATA_VECTOR(mortality_year); // coresponding year - 1990....
+  DATA_VECTOR(mortality_meanlog); // mortality rate / 100K from CID
+  DATA_VECTOR(mortality_sdlog); // mortality rate / 100K from CID
+  DATA_VECTOR(Treat_year); // mortality rate / 100K from CID
+  DATA_VECTOR(Treat_qnorm); // mortality rate / 100K from CID
+  DATA_VECTOR(Treat_sd); // mortality rate / 100K from CID
+  
+  Type prior = 0;
 
   // transform for sampling
     PARAMETER(log_beta_s);  // 4.4
@@ -130,14 +140,6 @@ Type objective_function<Type>::operator()() {
     vector<Type> pars(32);
     pars << pop1970, beta_s, beta_r, kappa, b, mu, mu_tb, theta_s, theta_r, rho, sigma, delta, gamma, phi, varepsilon, omega, tau_0, tau_1, chi_s, chi_r, varrho, r_0, r_1, r_2, r_3, varsigma, c_s0, c_r0, c_r1, m_n, m_r, xi;
 
-    PARAMETER(log_sdlog); // half normal - shrink towards zero
-    Type sdlog(exp(log_sdlog));
-    dll -= dnorm(sdlog, Type(0), Type(2.5), true) + log_sdlog;
-
-    PARAMETER(log_sdlog_m); // half normal - shrink towards zero
-    Type sdlog_m(exp(log_sdlog_m));
-    dll -= dnorm(sdlog_m, Type(0), Type(2.5), true) + log_sdlog_m;
-
   vector<Type> pars_null = pars; // to flexibly change the index
   for (int i = 0; i < nullid.size(); i++) {
     int idx = asDouble(nullid[i]); // is there a way to cast the index directly
@@ -156,32 +158,40 @@ Type objective_function<Type>::operator()() {
 
   // extract expected data
   matrix<double> out = mod.out(); // get the equilibrium
-  vector<Type> ept = Double2Type<Type>(out.row(14+17)); // index of notification
-  vector<Type> emr = Double2Type<Type>(out.row(14+18)); // index of notification
-  // Expected rate per 100.000
-  ept = (ept / pop1970) * 1e5; // constant pop
-  emr = (emr / pop1970) * 1e5; // constant pop
-  
-  // calculate the likelihood
-  matrix<Type> ill(noti.size(), 3);
-  matrix<Type> mll(mortality.size(), 3);
 
-  for (int i = 0; i < noti.size(); i++) {
-    int idx = asDouble((year[i] - year_zero) * 100); // 1/0.01
-    ill(i, 0) = log(noti[i]);
-    ill(i, 1) = log(ept[i]);
-    ill(i, 2) = dnorm(log(noti[i]+DBL_EPSILON), log(ept[idx]+DBL_EPSILON), sdlog, true);
-    dll      -= dnorm(log(noti[i]+DBL_EPSILON), log(ept[idx]+DBL_EPSILON), sdlog, true);
+  Type lhd = 0;
+  vector<Type> 
+    ept = Double2Type<Type>(out.row(8)), // index of notification model dependent
+    emr = Double2Type<Type>(out.row(9)), // index of mortality
+    eTc = Double2Type<Type>(out.row(11)), // index of mortality
+    eTf = Double2Type<Type>(out.row(12)); // index of mortality
+
+  for (int i = 0; i < notification_meanlog.size(); i++) {
+    int idx = asDouble((notification_year[i] - year_zero) * len_dt);
+    vector<Type> annual_v = ept(Eigen::seqN(idx, len_dt)); 
+    Type x = annual_v.sum() / pop1970 * 1e5;
+    dll -= log_normal_lpdf(x, notification_meanlog[i], notification_sdlog[i]);
   }
 
-  // calculate the likelihood of mortality
-  for (int i = 0; i < mortality.size(); i++) {
-    int idx = asDouble((mortality_year[i] - year_zero) * 100); // 1/0.01
-    mll(i, 0) = log(mortality[i]);
-    mll(i, 1) = log(emr[i]);
-    mll(i, 2) = dnorm(log(mortality[i]+DBL_EPSILON), log(emr[idx]+DBL_EPSILON), sdlog_m, true);
-    dll      -= dnorm(log(mortality[i]+DBL_EPSILON), log(emr[idx]+DBL_EPSILON), sdlog_m, true);
+  for (int i = 0; i < mortality_meanlog.size(); i++) {
+    int idx = asDouble((mortality_year[i] - year_zero) * len_dt);
+    vector<Type> annual_v = emr(Eigen::seqN(idx, len_dt));
+    Type x = annual_v.sum() / pop1970 * 1e5;
+    dll -= log_normal_lpdf(x, mortality_meanlog[i], mortality_sdlog[i]);
   }
+
+  for (int i = 0; i < Treat_qnorm.size(); i++) {
+    int idx = asDouble((Treat_year[i] - year_zero) * len_dt);
+    vector<Type> 
+      annual_success = eTc(Eigen::seqN(idx, len_dt)),
+      annual_failed = eTf(Eigen::seqN(idx, len_dt));
+    Type 
+      prop_f = annual_failed.sum() / (annual_failed.sum() + annual_success.sum()), 
+      x = qnorm(prop_f);
+    dll -= dnorm(Treat_qnorm[i], x, Treat_sd[i], true);
+  }
+  REPORT(prior);
+  REPORT(lhd);  
   REPORT(out0);
   REPORT(out);
   return dll;
