@@ -160,11 +160,11 @@ Type objective_function<Type>::operator()() {
   matrix<double> out = mod.out(); // get the equilibrium
 
   Type lhd = 0;
-  vector<Type> 
-    ept = Double2Type<Type>(out.row(8)), // index of notification model dependent
-    emr = Double2Type<Type>(out.row(9)), // index of mortality
-    eTc = Double2Type<Type>(out.row(11)), // index of mortality
-    eTf = Double2Type<Type>(out.row(12)); // index of mortality
+  vector<Type> // note that the output has an extra row for time
+    ept = Double2Type<Type>(out.row(8+1)),  // index of notification model dependent 
+    emr = Double2Type<Type>(out.row(9+1)),  // index of mortality
+    eTc = Double2Type<Type>(out.row(11+1)), // index of mortality
+    eTf = Double2Type<Type>(out.row(12+1)); // index of mortality
 
   for (int i = 0; i < notification_meanlog.size(); i++) {
     int idx = asDouble((notification_year[i] - year_zero) * len_dt);
