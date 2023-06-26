@@ -168,16 +168,16 @@ Type objective_function<Type>::operator()() {
 
   for (int i = 0; i < notification_meanlog.size(); i++) {
     int idx = asDouble((notification_year[i] - year_zero) * len_dt);
-    vector<Type> annual_v = ept(Eigen::seqN(idx, len_dt)); 
-    Type x = annual_v.sum() / pop1970 * 1e5;
-    dll -= log_normal_lpdf(x, notification_meanlog[i], notification_sdlog[i]);
+    vector<Type> annual_v = ept(Eigen::seqN(idx, len_dt - 1));  // not work with dt == 1
+    Type notification_rate = (annual_v.sum() / len_dt) * 1e5;
+    dll -= log_normal_lpdf(notification_rate, notification_meanlog[i], notification_sdlog[i]);
   }
 
   for (int i = 0; i < mortality_meanlog.size(); i++) {
     int idx = asDouble((mortality_year[i] - year_zero) * len_dt);
     vector<Type> annual_v = emr(Eigen::seqN(idx, len_dt));
-    Type x = annual_v.sum() / pop1970 * 1e5;
-    dll -= log_normal_lpdf(x, mortality_meanlog[i], mortality_sdlog[i]);
+    Type mortality_rate = (annual_v.sum() / len_dt) * 1e5;
+    dll -= log_normal_lpdf(mortality_rate, mortality_meanlog[i], mortality_sdlog[i]);
   }
 
   for (int i = 0; i < Treat_qnorm.size(); i++) {
@@ -187,8 +187,8 @@ Type objective_function<Type>::operator()() {
       annual_failed = eTf(Eigen::seqN(idx, len_dt));
     Type 
       prop_f = annual_failed.sum() / (annual_failed.sum() + annual_success.sum()), 
-      x = qnorm(prop_f);
-    dll -= dnorm(Treat_qnorm[i], x, Treat_sd[i], true);
+      fail_prop = qnorm(prop_f);
+    dll -= dnorm(Treat_qnorm[i], fail_prop, Treat_sd[i], true);
   }
   REPORT(prior);
   REPORT(lhd);  
