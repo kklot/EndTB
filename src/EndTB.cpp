@@ -67,7 +67,6 @@ Type objective_function<Type>::operator()() {
   matrix<double> out0 = mod0.out(); // get the equilibrium
   vector<double> eqVec = out0(Eigen::seqN(1, init.size()), Eigen::last);
   vector<Type> eqVecT = Double2Type<Type>(eqVec); 
-  eqVecT = eqVecT * (pop1970 / eqVecT.sum()); // adjust to target pop
   
   ODE<Type, TB<Type>> mod(eqVecT, pars, asDouble(2030 - year_zero), dbdt); // rerun with eq as init, first time point represents 1970: maybe not?
 
