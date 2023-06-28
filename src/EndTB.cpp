@@ -97,16 +97,6 @@ Type objective_function<Type>::operator()() {
     dll -= log_normal_lpdf(mortality_rate, mortality_meanlog[i], mortality_sdlog[i]);
   }
 
-  for (int i = 0; i < Treat_qnorm.size(); i++) {
-    int idx = asDouble((Treat_year[i] - year_zero) * len_dt);
-    vector<Type> 
-      annual_success = eTc(Eigen::seqN(idx, len_dt)),
-      annual_failed = eTf(Eigen::seqN(idx, len_dt));
-    Type 
-      prop_f = annual_failed.sum() / (annual_failed.sum() + annual_success.sum()), 
-      fail_prop = qnorm(prop_f);
-    dll -= dnorm(Treat_qnorm[i], fail_prop, Treat_sd[i], true);
-  }
   REPORT(dll);
   REPORT(lhd);  
   REPORT(out0);
