@@ -82,7 +82,7 @@ public:
         x[2] + x[3] + x[4] + x[5] + x[7] + x[8] + x[9] + x[10] + 
         x[j+2] + x[j+3] + x[j+4] + x[j+5] + x[j+7] + x[j+8] + x[j+9] + x[j+10]
       ); // balancing birth rate 
-    bzero = (b == 0) ? bzero : b * Nt;
+    bzero += b * Nt; // growth rate, when b=0 -> const
     // DEs
     dxdt[0]  = bzero - (lambda_r + lambda_s) * x[0]                - mu*x[0];
     // Sensitive
