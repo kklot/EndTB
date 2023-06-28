@@ -61,7 +61,6 @@ Type objective_function<Type>::operator()() {
   vector<Type> pars_null = pars; // to flexibly change the index
   for (int i = 0; i < nullid.size(); i++) pars_null[nullid[i]] = Type(0); // set zero to health system parameters
   
-  pars_null[19] = tmax - year_zero - 1; // move year zero backward for equi. phase
 
   ODE<Type, TB<Type> > mod0(init, pars_null, asDouble(tmax), dbdt); // run steady state 
   matrix<double> out0 = mod0.out(); // get the equilibrium
