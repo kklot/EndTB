@@ -36,7 +36,7 @@ Type objective_function<Type>::operator()() {
   DATA_SCALAR(year_zero); // maybe estimate this
   DATA_SCALAR(dt);
   double dbdt = asDouble(dt), len_dt = 1/dbdt;
-  DATA_VECTOR(nullid); // indices of parameters in null case
+  DATA_IVECTOR(nullid); // indices of parameters in null case
   
   // Target calibration
   DATA_VECTOR(notification_year); // year of the notification in original format eg... 1999
@@ -59,10 +59,7 @@ Type objective_function<Type>::operator()() {
     pars[fit_parameters_id[i]-1] = parameters[i];
 
   vector<Type> pars_null = pars; // to flexibly change the index
-  for (int i = 0; i < nullid.size(); i++) {
-    int idx = asDouble(nullid[i]); // is there a way to cast the index directly
-    pars_null[idx] = Type(0); // set zero to health system parameters
-  }
+  for (int i = 0; i < nullid.size(); i++) pars_null[nullid[i]] = Type(0); // set zero to health system parameters
   
   pars_null[19] = tmax - year_zero - 1; // move year zero backward for equi. phase
 
