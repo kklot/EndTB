@@ -49,42 +49,14 @@ Type objective_function<Type>::operator()() {
   DATA_VECTOR(Treat_qnorm); // mortality rate / 100K from CID
   DATA_VECTOR(Treat_sd); // mortality rate / 100K from CID
   
-  Type prior = 0;
+  DATA_VECTOR(fallback_parameters);
+  DATA_IVECTOR(fit_parameters_id);
 
-  // transform for sampling
-    PARAMETER(beta_s);  // 4.4
-    PARAMETER(beta_r); // 12 
-    PARAMETER(kappa); // U(0.1 – 10) 
-    PARAMETER(b); 
-    PARAMETER(mu); 
-    PARAMETER(mu_tb); // 0.2
-    PARAMETER(theta_s);
-    PARAMETER(theta_r);
-    PARAMETER(rho);
-    PARAMETER(sigma); // 7.9 (95% CrI 3.7-11.8) 
-    PARAMETER(delta); // (95% CrI 2.7-11.5)
-    PARAMETER(gamma); // 12 (95% CrI 8.5-15) 
-    PARAMETER(phi);
-    PARAMETER(varepsilon);
-    PARAMETER(omega);
-    PARAMETER(tau_0);
-    PARAMETER(tau_1);
-    PARAMETER(chi_s);
-    PARAMETER(chi_r);
-    PARAMETER(varrho); // 0.05 (95% CrI 0.005-0.09)
-    PARAMETER(r_0);
-    PARAMETER(r_1);
-    PARAMETER(r_2);
-    PARAMETER(r_3);
-    PARAMETER(varsigma);
-    PARAMETER(c_s0);
-    PARAMETER(c_r0);
-    PARAMETER(c_r1);
-    PARAMETER(m_n);
-    PARAMETER(m_r);
-    PARAMETER(xi);
-    vector<Type> pars(32);
-    pars << pop1970, beta_s, beta_r, kappa, b, mu, mu_tb, theta_s, theta_r, rho, sigma, delta, gamma, phi, varepsilon, omega, tau_0, tau_1, chi_s, chi_r, varrho, r_0, r_1, r_2, r_3, varsigma, c_s0, c_r0, c_r1, m_n, m_r, xi;
+  PARAMETER_VECTOR(parameters);
+  
+  vector<Type> pars = fallback_parameters;
+  for (int i = 0; i < parameters.size(); i++)
+    pars[fit_parameters_id[i]-1] = parameters[i];
 
   vector<Type> pars_null = pars; // to flexibly change the index
   for (int i = 0; i < nullid.size(); i++) {
@@ -141,7 +113,6 @@ Type objective_function<Type>::operator()() {
     dll -= dnorm(Treat_qnorm[i], fail_prop, Treat_sd[i], true);
   }
   REPORT(dll);
-  REPORT(prior);
   REPORT(lhd);  
   REPORT(out0);
   REPORT(out);
