@@ -110,7 +110,8 @@ init_moldova <- c(
     MOR = 0,
     FOIs = 0,
     FOIr = 0,
-    PREV = 0
+    PREV = 0, 
+    POP = 23842802+1
 )
 
 states_moldova <- c(
@@ -149,5 +150,6 @@ states_moldova <- c(
     MOR = "Mortality",
     FOIs = "FOI DS",
     FOIr = "FOI DR",
-    PREV = "Prevalence"
+    PREV = "Prevalence", 
+    POP = "Total Pop"
 )

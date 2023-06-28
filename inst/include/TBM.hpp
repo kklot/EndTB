@@ -132,5 +132,6 @@ public:
     dxdt[j+19] = lambda_s - x[j+19];
     dxdt[j+20] = lambda_r - x[j+20];
     dxdt[j+21] = (Nt - x[0] - x[12] - x[13] - x[j+12] - x[j+13])/Nt - x[j+21]; // prevalence - cross-sectional
+    dxdt[j+22] = Nt - x[j+22]; // population
   }
 };

@@ -108,21 +108,25 @@ Type objective_function<Type>::operator()() {
   Type lhd = 0;
   vector<Type> // note that the output has an extra row for time
     ept = Double2Type<Type>(out.row(17+1)),  // index of notification model dependent 
-    emr = Double2Type<Type>(out.row(18+1));  // index of mortality
+    emr = Double2Type<Type>(out.row(18+1)),
+    pop = Double2Type<Type>(out.row(22+1))
+    ;  // index of mortality
     // eTc = Double2Type<Type>(out.row(11+1)), // index of mortality
     // eTf = Double2Type<Type>(out.row(12+1)); // index of mortality
 
   for (int i = 0; i < notification_meanlog.size(); i++) {
     int idx = asDouble((notification_year[i] - year_zero) * len_dt);
-    vector<Type> annual_v = ept(Eigen::seqN(idx, len_dt - 1));  // not work with dt == 1
-    Type notification_rate = (annual_v.sum() / len_dt) * 1e5;
+    Eigen::ArithmeticSequence ii = Eigen::seqN(idx, len_dt);
+    vector<Type> annual_v = ept(ii), annual_p = pop(ii);
+    Type notification_rate = (annual_v.sum() / (annual_p.sum() / len_dt)) * 1e5;
     dll -= log_normal_lpdf(notification_rate, notification_meanlog[i], notification_sdlog[i]);
   }
 
   for (int i = 0; i < mortality_meanlog.size(); i++) {
     int idx = asDouble((mortality_year[i] - year_zero) * len_dt);
-    vector<Type> annual_v = emr(Eigen::seqN(idx, len_dt));
-    Type mortality_rate = (annual_v.sum() / len_dt) * 1e5;
+    Eigen::ArithmeticSequence ii = Eigen::seqN(idx, len_dt);
+    vector<Type> annual_v = emr(ii), annual_p = pop(ii);
+    Type mortality_rate = (annual_v.sum() / (annual_p.sum() / len_dt)) * 1e5;
     dll -= log_normal_lpdf(mortality_rate, mortality_meanlog[i], mortality_sdlog[i]);
   }
 
